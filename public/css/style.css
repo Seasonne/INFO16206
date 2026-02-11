@@ -1,0 +1,69 @@
+/* General Styles */
+body {
+  background-color: white;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  color: #cc0000;
+  font-weight: bold;
+}
+
+/* Highlight class for key content */
+.highlight {
+  background-color: #ffcccc;
+  color: #cc0000;
+  padding: 10px;
+  border-left: 4px solid #cc0000;
+}
+
+/* Table styling */
+table {
+  background-color: white;
+}
+
+table thead {
+  background-color: #cc0000;
+  color: white;
+}
+
+table tbody tr:hover {
+  background-color: #ffe6e6;
+}
+
+/* Button styling */
+button, .btn {
+  background-color: #cc0000;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button:hover, .btn:hover {
+  background-color: #990000;
+}
+
+/* Links */
+a {
+  color: #cc0000;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Container */
+.container {
+  background-color: white;
+}
+
+/* Emphasis */
+strong, .important {
+  color: #cc0000;
+  font-weight: bold;
+}
