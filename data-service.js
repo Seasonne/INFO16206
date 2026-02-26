@@ -65,10 +65,55 @@ function getDepartments() {
         }
     });
 }
-        
+
+function addEmployee(employeeData) {
+    return new Promise((res, rej) => {
+        if (!employeeData) {
+            rej("Employee data is required.");
+            return;
+        }
+
+        // normalize/convert incoming values
+        const emp = {
+            firstName: employeeData.firstName || "",
+            lastName: employeeData.lastName || "",
+            email: employeeData.email || "",
+            SSN: employeeData.SSN || "",
+            addressStreet: employeeData.addressStreet || "",
+            addressCity: employeeData.addressCity || "",
+            addressState: employeeData.addressState || "",
+            addressPostal: employeeData.addressPostal || "",
+            maritalStatus: employeeData.maritalStatus || "single",
+            isManager: employeeData.isManager === "on" || employeeData.isManager === true,
+            employeeManagerNum: employeeData.employeeManagerNum ? parseInt(employeeData.employeeManagerNum) : null,
+            status: employeeData.status || "",
+            department: employeeData.department ? parseInt(employeeData.department) : null,
+            hireDate: employeeData.hireDate || ""
+        };
+
+        // assign a new employeeNum (max existing + 1)
+        const maxNum = employees.reduce((max, e) => {
+            return e.employeeNum > max ? e.employeeNum : max;
+        }, 0);
+        emp.employeeNum = maxNum + 1;
+
+        employees.push(emp);
+
+        // persist the updated list back to the JSON file
+        fs.writeFile('./data/employees.json', JSON.stringify(employees, null, 2), (err) => {
+            if (err) {
+                rej("Unable to save new employee");
+            } else {
+                res();
+            }
+        });
+    });
+}
+
 module.exports = {
     initialize,
     getAllEmployees,
     getManagers,
-    getDepartments
+    getDepartments,
+    addEmployee
 };

@@ -3,6 +3,25 @@ const dotenv = require("dotenv");
 const path = require("path");
 const dataservice = require("./data-service.js");
 
+// HW3 stuff
+// For file uploads
+const fs = require('fs');
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: 'public/images/uploaded',
+  filename: (req,file,cb) => cb(null, Date.now() + path.extname(file.originalname))
+});
+const upload = multer({ storage });
+
+// end file upload stuff
+// Add employee stff
+const bodyParser = require('body-parser');
+// parse application/x-www-form-urlencoded
+const urlencodedParser = bodyParser.urlencoded({ extended: true });
+// end add employee stuff
+
+
+
 const app = express();
 dotenv.config();
 
@@ -30,6 +49,55 @@ app.get("/", (req, res) => {
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "views", "about.html"));
 });
+
+
+// Assignment 3 stuff
+app.get("/employees/add", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "addEmployee.html"));
+});
+app.get("/images/add", (req, res) => {
+  res.sendFile(path.join(__dirname, "views", "addImage.html"));
+});
+app.post('/images/add',
+    upload.single('imageFile'),
+    (req, res) => {
+        res.redirect('/images');
+    }
+);
+
+// image get stuff
+
+app.get('/images', (req, res) => {
+  const imagesDir = path.join(__dirname, 'public', 'images', 'uploaded');
+
+  fs.readdir(imagesDir, (err, files) => {
+    if (err) {
+      console.log(`Failed to read images directory: ${err}`);
+      res.status(500).send('Failed to read images directory');
+      return;
+    }
+    res.json(files);
+  });
+});
+//end image get stuff
+
+// add employee post stuff
+app.post('/employees/add', urlencodedParser, (req, res) => {
+  const newEmployee = req.body;
+    dataservice.addEmployee(newEmployee)
+    .then(() => {
+        res.redirect('/employees');
+    })
+    .catch((err) => {
+        console.log(`Failed to add employee: ${err}`);
+        res.status(500).send('Failed to add employee');
+    });
+});
+
+// end Assignment 3 stuff
+
+
+
 app.get('/employees', (req, res) => {
   dataservice.getAllEmployees()
   .then((data) => {
