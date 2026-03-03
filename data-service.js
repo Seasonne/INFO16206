@@ -72,9 +72,10 @@ function addEmployee(employeeData) {
             rej("Employee data is required.");
             return;
         }
-
+        
         // normalize/convert incoming values
         const emp = {
+            employeeNum: 0, // will be assigned later
             firstName: employeeData.firstName || "",
             lastName: employeeData.lastName || "",
             email: employeeData.email || "",
