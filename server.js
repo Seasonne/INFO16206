@@ -94,19 +94,54 @@ app.post('/employees/add', urlencodedParser, (req, res) => {
     });
 });
 
+
 // end Assignment 3 stuff
 
 
 
 app.get('/employees', (req, res) => {
-  dataservice.getAllEmployees()
-  .then((data) => {
-    res.json(data);
-  })
-  .catch((err) => {
+    if(req.query.department) {
+      dataservice.getEmployeesByDepartment(req.query.department)
+      .then((data) => {       res.json(data);
+    }).catch((err) => {
+        res.json({ message: "no results" });
+      });
+  } else if(req.query.manager) {
+    dataservice.getEmployeesByManager(req.query.manager)
+      .then((data) => {
+        res.json(data);
+      })
+      .catch((err) => {
+        res.json({ message: "no results" });
+      });
+    }
+   else if(req.query.status) {
+    dataservice.getEmployeesByStatus(req.query.status)
+    .then((data) => {       res.json(data);
+    }).catch((err) => {
+        res.json({ message: "no results" });
+      });
+  } else {
+    dataservice.getAllEmployees()
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
     console.log(`Failed to load employees: ${err}`);
   });
+}});
+
+// HW3 part 2
+app.get("/employees/:value", (req, res) => {
+  dataservice.getEmployeesByNumber(req.params.value)
+    .then((data) => {
+      res.json(data);
+    })
+    .catch((err) => {
+      res.json({ message: "no results" });
+    });
 });
+// End HW3 part 2
 
 app.get('/managers', (req, res) => {
   dataservice.getManagers()
